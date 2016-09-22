@@ -1,0 +1,81 @@
+﻿@model UscParser.Models.EventSummary
+@using Newtonsoft.Json
+
+<h6 style="margin: 0; color: #999;">Event</h6>
+<h1 style="margin-top: .2em;">@Model.Event.Name</h1>
+
+<h6 style="margin: 0; color: #999;">Chief TD</h6>
+<h4>@Model.ChiefTournamentDirector.Name</h4>
+
+@if (Model.ChiefAssistantTournamentDirector != null)
+{
+	<h6 style="margin: 0; color: #999;">Assistant Chief TD</h6>
+	<h4>@Model.ChiefAssistantTournamentDirector.Name</h4>
+}
+
+<h6 style="margin: 0; color: #999;">Dates</h6>
+<h4>@Model.EventDates</h4>
+
+<h6 style="margin: 0; color: #999;">Location</h6>
+<h4>@Model.Location</h4>
+
+<h6 style="margin: 0; color: #999;">Stats</h6>
+<h4>@Model.Players players, @Model.NumberOfSections sections</h4>
+<h4>@Model.Processed</h4>
+
+<hr />
+
+@foreach (var eventSection in Model.Sections)
+{
+	<h3>@eventSection.Name</h3>
+
+	<table class="table" data-sortable>
+		<thead>
+			<tr>
+				<th>Rank</th>
+				<th>Name</th>
+				<th>Points</th>
+				@foreach (var r in Enumerable.Range(1, eventSection.Results.FirstOrDefault().Rounds.Count()))
+				{
+					<th>Round @r</th>
+				}
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var player in eventSection.Results)
+			{
+				<tr>
+					<td style="width: 60px; vertical-align: middle;"><h2 style="margin-top: 0; margin-bottom: 0;">@player.Rank</h2></td>
+					<td style="width: 240px;">
+						<strong>@player.Name</strong>
+
+						@foreach (var r in player.Ratings)
+						{
+							<div class="text-muted">@r.Type: @r.Before -> @r.After</div>
+						}
+					</td>
+					<td style="width: 80px;">@player.TotalPoints</td>
+
+					@foreach (var r in player.Rounds)
+					{
+						<td>
+							@r.Outcome
+						</td>
+					}
+				</tr>
+
+				@*<pre>@JsonConvert.SerializeObject(player, Formatting.Indented)</pre>*@
+			}
+		</tbody>
+	</table>
+
+	<hr />
+}
+
+<script>
+
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
+</script>
