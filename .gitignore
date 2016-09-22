@@ -18,8 +18,6 @@ UscParser/TestResult.xml
 TestResults
 packages
 UscParser/App_Data/nlog.log
-robocopy.log
 Publish/
-Properties/
 .vs/
 Build/*.log
